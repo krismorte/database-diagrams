@@ -1,5 +1,6 @@
 schemaspy.db.type=mssql08
 jdbc.drive.class=com.microsoft.sqlserver.jdbc.SQLServerDriver
+logfile=/var/log/script.log
 db.type=mssql
 db.server=server
 db.port=1433

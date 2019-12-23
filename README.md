@@ -13,10 +13,17 @@ docker pull krismorte/databasediagrams:1.0
 ```
 
 ## Run Docker Container
-To run the container you will need to create some one properties file one per server as the ```example.prop``` in the dbconf dir
+To run the container you will need to create some one properties file one per server as the ```example.prop``` in the dbconf dir.
 ```
 docker run -d --rm -p 80:80 -v dbconf_dir:/app/dbconf --name teste krismorte/databasediagrams:1.0
 ```
+
+By default the script will run everyday at as 07AM, but you can run manually to see the result. This process can take several minutes depends the database sizes
+
+```
+docker exec teste ./script.sh
+```
+
 ```example.prop``` is a SQL Server example the image supports postgresql, mysql and redis
 
 Seek the schemaspy schemaspy.db.type [here](https://github.com/schemaspy/schemaspy/tree/master/src/main/resources/org/schemaspy/types) 
@@ -29,9 +36,7 @@ Below the queries `db.query`
 - redis select datname from pg_catalog.pg_database where datname not in ('template0','template1','postgres') order by 1
 
 ## Build the Image
-```
-#docker build -t krismorte/databasediagrams:1.0 .
-```
+``` #docker build -t krismorte/databasediagrams:1.0 .```
 
 the full documentarion of the container is [here](https://hub.docker.com/r/krismorte/databasediagrams) 
 

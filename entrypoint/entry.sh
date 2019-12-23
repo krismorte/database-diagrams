@@ -14,3 +14,5 @@ chmod 755 /script.sh
 
 #start nginx
 nginx -g "daemon off;"
+
+/script.sh
