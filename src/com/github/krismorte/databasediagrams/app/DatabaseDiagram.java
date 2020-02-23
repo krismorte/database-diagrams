@@ -54,7 +54,7 @@ public class DatabaseDiagram {
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
         }
-        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp drives/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + prop.getProperty("db.port") + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + schemaParam + "' -o " + outputPath + " >> " + logFile;
+        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp drives/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + prop.getProperty("db.port") + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
     }
 
 }
