@@ -47,7 +47,7 @@ public class DatabaseDiagram {
         String logFile = System.getenv("LOGFILE"); 
         
         String schemaParam = "";        
-        String outputPath = output+ "/" + prop.getProperty("db.type").trim() + "/" + prop.getProperty("db.server").trim() + "/" + databaseName;
+        String outputPath = output+ "/" + prop.getProperty("schemaspy.db.type").trim() + "/" + prop.getProperty("db.server").trim() + "/" + databaseName;
         
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
