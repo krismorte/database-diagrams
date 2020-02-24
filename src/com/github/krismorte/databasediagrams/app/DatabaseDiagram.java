@@ -25,11 +25,7 @@ public class DatabaseDiagram {
     private static List executeQuery(Properties prop) throws Exception {
         Query query = new Query();
 
-        List<String> rows = query.run(prop.getProperty("jdbc.drive.class"),
-                prop.getProperty("db.url"),
-                prop.getProperty("db.user"),
-                prop.getProperty("db.password"),
-                prop.getProperty("db.query"));
+        List<String> rows = query.run(prop);
 
         DatabaseVersion = query.getDatabaseProductName() + " " + query.getDatabaseProductVersion();
 
@@ -43,14 +39,16 @@ public class DatabaseDiagram {
             schemaSpyCommands += formatSchemaSpyCommand(output,s, prop) + "\n \n";
         }
 
-        String fileName = prop.getProperty("db.type").trim() + "-" + prop.getProperty("db.server").trim() + ".sh";
+        String fileName = prop.getProperty("schemaspy.db.type").trim() + "-" + prop.getProperty("db.server").trim() + ".sh";
         FileGenerator.generateSH(fileName, schemaSpyCommands);
     }
 
     private static String formatSchemaSpyCommand(String output,String databaseName, Properties prop) {
         String logFile = System.getenv("LOGFILE"); 
-        String schemaParam = "";
+        
+        String schemaParam = "";        
         String outputPath = output+ "/" + prop.getProperty("db.type").trim() + "/" + prop.getProperty("db.server").trim() + "/" + databaseName;
+        
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
         }

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *
@@ -19,9 +20,16 @@ public class Query {
     private String databaseProductName;
     private String databaseProductVersion;
 
-    public List run(String drive, String url, String user, String password, String query) throws Exception {
+    public List run(/*String drive, String url, String user, String password, String query*/Properties prop) throws Exception {
         List<String> rows = new ArrayList<>();
-        Connection connection = ConnectionFactory.getConnetion(drive, url, user, password);
+        
+        String user = prop.getProperty("db.user");
+        String password = prop.getProperty("db.password");
+        String query = prop.getProperty("db.query").equals("") || prop.getProperty("db.query")==null 
+                ? DatabaseSettings.getDatabasesQuery(prop) : prop.getProperty("db.query");
+        
+        Connection connection = ConnectionFactory.getConnetion(DatabaseSettings.getDriveClass(prop)
+                , DatabaseSettings.getUrl(prop), user, password);
 
         driverName = connection.getMetaData().getDriverName();
         driverVersion = connection.getMetaData().getDriverVersion();
