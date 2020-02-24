@@ -25,8 +25,8 @@ public class Query {
         
         String user = prop.getProperty("db.user");
         String password = prop.getProperty("db.password");
-        String query = prop.getProperty("db.query").equals("") || prop.getProperty("db.query")==null 
-                ? DatabaseSettings.getDatabasesQuery(prop) : prop.getProperty("db.query");
+        String query =  prop.getProperty("db.query") ==null
+                ? DatabaseSettings.getDatabasesQuery(prop) : prop.getProperty("db.query") ;
         
         Connection connection = ConnectionFactory.getConnetion(DatabaseSettings.getDriveClass(prop)
                 , DatabaseSettings.getUrl(prop), user, password);
