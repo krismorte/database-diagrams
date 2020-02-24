@@ -33,7 +33,7 @@ Below the queries `db.query`
 - mssql select name from master..sysdatabases where name not in ('master','tempdb','msdb','model') order by 1
 - pgsql select datname from pg_catalog.pg_database where datname not in ('template0','template1','postgres') order by 1
 - mysql SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE  SCHEMA_NAME NOT IN ('information_schema', 'performance_schema', 'mysql','sys','tmp') ORDER BY SCHEMA_NAME
-- redis select datname from pg_catalog.pg_database where datname not in ('template0','template1','postgres') order by 1
+- postgres select datname from pg_catalog.pg_database where datname not in ('template0','template1','postgres') order by 1
 
 ## Build the Image
 ``` #docker build -t krismorte/databasediagrams:1.0 .```
