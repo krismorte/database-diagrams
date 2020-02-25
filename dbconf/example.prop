@@ -1,8 +1,0 @@
-schemaspy.db.type=mssql08
-jdbc.drive.class=com.microsoft.sqlserver.jdbc.SQLServerDriver
-db.server=server
-db.port=1433
-db.url=jdbc:sqlserver://server:1433;databaseName=master
-db.user=sa
-db.password=pass
-db.query=select name from master..sysdatabases where name not in ('master','tempdb','msdb','model') order by 1

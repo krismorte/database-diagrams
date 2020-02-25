@@ -1,0 +1,4 @@
+schemaspy.db.type=mysql
+db.server=172.17.0.1
+db.user=root
+db.password=secret
