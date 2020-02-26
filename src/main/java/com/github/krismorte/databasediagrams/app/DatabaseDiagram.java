@@ -1,6 +1,7 @@
 package com.github.krismorte.databasediagrams.app;
 
 import com.github.krismorte.databasediagrams.file.FileGenerator;
+import com.github.krismorte.databasediagrams.sql.DatabaseSettings;
 import com.github.krismorte.databasediagrams.sql.Query;
 import java.util.List;
 import java.util.Properties;
@@ -52,7 +53,7 @@ public class DatabaseDiagram {
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
         }
-        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp drives/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + prop.getProperty("db.port") + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
+        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp drives/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
     }
 
 }

@@ -1,5 +1,7 @@
 nbproject/**
 build/
+dist/
+target/
 nbbuild/
 nbdist/
 .nb-gradle/

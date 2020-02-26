@@ -5,6 +5,7 @@ MAINTAINER krisnamourt_ti@hotmail.com
 ENV CRN='0 7 * * *'
 ENV OUTPUT=/www
 ENV LOGFILE=/var/log/script.log
+ENV TMP_IDX=index.html
 
 #COPY FILES
 RUN mkdir /app
@@ -19,7 +20,7 @@ COPY /template /www/
 ADD /crontab/script.sh /script.sh
 RUN chmod 755 /script.sh
 
-VOLUME /app/dbconf
+VOLUME /dbconf
 
 
 #ADD LIBS

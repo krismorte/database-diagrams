@@ -37,6 +37,8 @@ Below the queries `db.query`
 
 ## Build the Image
 ``` #docker build -t krismorte/databasediagrams:1.0 .```
+sudo docker build  -t diagramtest  -f Dockerfile.test .
+
 
 the full documentarion of the container is [here](https://hub.docker.com/r/krismorte/databasediagrams) 
 
