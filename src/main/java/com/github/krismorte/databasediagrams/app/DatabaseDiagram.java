@@ -3,8 +3,15 @@ package com.github.krismorte.databasediagrams.app;
 import com.github.krismorte.databasediagrams.file.FileGenerator;
 import com.github.krismorte.databasediagrams.sql.DatabaseSettings;
 import com.github.krismorte.databasediagrams.sql.Query;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -53,7 +60,26 @@ public class DatabaseDiagram {
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
         }
-        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp drives/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
+
+        String dbType = prop.getProperty("schemaspy.db.type").equals("pgsql") ? "postgresql" : prop.getProperty("schemaspy.db.type");
+        String drivesPath = searchJarDir(dbType);
+
+        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp "+drivesPath+"/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
+    }
+
+    private static String searchJarDir(final String name){
+        String dir="";
+        try {
+
+            List<Path> files=Files.walk(Paths.get(System.getProperty("user.home")+"/.m2/repository/"))
+                    .filter(Files::isRegularFile).collect(Collectors.toList());
+            Path jarFile = files.stream().filter(f -> f.toString().contains(name) && f.toString().endsWith(".jar")).findAny().orElse(null);
+            dir = jarFile.getParent().toString();
+            return dir;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
 }
