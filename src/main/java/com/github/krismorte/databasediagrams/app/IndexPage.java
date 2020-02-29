@@ -1,6 +1,8 @@
 package com.github.krismorte.databasediagrams.app;
 
 import com.github.krismorte.databasediagrams.file.FileGenerator;
+import com.github.krismorte.databasediagrams.sql.DatabaseSettings;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.time.LocalDateTime;
@@ -35,7 +37,7 @@ public class IndexPage {
         t.totalServer++;
         t.totalDatabases += databaseNames.size();
 
-        servers.add(new Server(t.type, server, version, databaseNames));
+        servers.add(new Server(DatabaseSettings.unifyingSQLTypes(t.type), server, version, databaseNames));
     }
 
     public void generate() throws Exception {

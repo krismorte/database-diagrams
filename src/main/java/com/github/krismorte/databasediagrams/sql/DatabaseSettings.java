@@ -102,7 +102,7 @@ public class DatabaseSettings {
         return port;
     }
 
-    private static String unifyingSQLTypes(String dbType) {
+    public static String unifyingSQLTypes(String dbType) {
         if (dbType.contains("mss")) {//mssql, mssql05 and mssql08
             return "mssql";
         }
@@ -110,6 +110,9 @@ public class DatabaseSettings {
             return "mysql";
         }
         if (dbType.contains("pg")) {//pgsql and pgsql11
+            return "pgsql";
+        }
+        if (dbType.contains("postgres")) {//pgsql and pgsql11
             return "pgsql";
         }
         return dbType;

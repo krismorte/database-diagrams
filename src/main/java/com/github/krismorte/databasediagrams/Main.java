@@ -37,7 +37,7 @@ public class Main {
                 List<String> rows = DatabaseDiagram.run(output, prop);
                 String dbVersion = DatabaseDiagram.DatabaseVersion;
 
-                indexPage.addServer(prop.getProperty("db.type"), prop.getProperty("db.server"), dbVersion, rows);
+                indexPage.addServer(prop.getProperty("schemaspy.db.type"), prop.getProperty("db.server"), dbVersion, rows);
             }
             indexPage.generate();
 
