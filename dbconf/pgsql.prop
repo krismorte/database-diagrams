@@ -1,0 +1,4 @@
+schemaspy.db.type=pgsql
+db.server=172.17.0.1
+db.user=postgres
+db.password=secret

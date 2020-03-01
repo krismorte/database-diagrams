@@ -7,7 +7,6 @@ ENV LOGFILE=/var/log/script.log
 ENV TMP_IDX=index.html
 
 COPY src/ src/
-#remove before commit
 COPY pom.xml index.html /
 COPY /template /www/
 COPY scripts/ /scripts/
