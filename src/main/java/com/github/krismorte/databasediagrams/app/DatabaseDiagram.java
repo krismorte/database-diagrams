@@ -61,10 +61,20 @@ public class DatabaseDiagram {
             schemaParam = " -s " + databaseName;
         }
 
-        String dbType = prop.getProperty("schemaspy.db.type").contains("pgsql") ? "postgresql" : prop.getProperty("schemaspy.db.type");
+        String dbType = handleDbType(prop.getProperty("schemaspy.db.type"));
         String drivesPath = searchJarDir(dbType);
 
         return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp "+drivesPath+"/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
+    }
+
+    private static String handleDbType(String dbType){
+        if (dbType.contains("pgsql")){
+            return "postgresql";
+        }
+        if (dbType.contains("mssql")){
+            return "mssql";
+        }
+        return dbType;
     }
 
     private static String searchJarDir(final String name){

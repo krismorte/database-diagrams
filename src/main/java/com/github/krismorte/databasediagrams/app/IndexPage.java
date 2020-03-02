@@ -29,6 +29,7 @@ public class IndexPage {
     }
 
     public void addServer(String type, String server, String version, List<String> databaseNames) {
+        type = DatabaseSettings.unifyingSQLTypes(type);
 
         if (types.isEmpty()) {
             types = DbType.generateNewList();
@@ -37,7 +38,7 @@ public class IndexPage {
         t.totalServer++;
         t.totalDatabases += databaseNames.size();
 
-        servers.add(new Server(DatabaseSettings.unifyingSQLTypes(t.type), server, version, databaseNames));
+        servers.add(new Server(t.type, server, version, databaseNames));
     }
 
     public void generate() throws Exception {
