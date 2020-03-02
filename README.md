@@ -5,7 +5,7 @@ Share this library with friends on Twitter and everywhere else you can.
 
 Thanks to the [SchemaSpy](https://github.com/schemaspy/schemaspy) developers
 
-This code was made to implementing full database documentation per server that wasn't implementing in the SchemaSpy originally project. This project also include a crontab scheduling, a nginx server to show the results and a java application to manager and coordenate the execution and build a main page to redirect to all databases sites made.
+This code was made to implementing full database documentation per server that wasn't implementing in the SchemaSpy originally project. This project also include a crontab scheduling, a nginx server to show the results and a java application to manager and coordinate the execution and build a main page to redirect to all databases sites made.
 
 ## Run Docker Pull
 ```
@@ -40,7 +40,7 @@ The output don't show the schemaspy log to see that run the follow command:
 docker exec databasediagrams cat /var/log/script.log
 ```
 
-Depends on the amount of databases and tables this process can take a long time to run, be aware about this. By default the script will run everyday at as 07AM you can overrite the env __CRN__
+Depends on the amount of databases and tables this process can take a long time to run, be aware about this. By default the script will run everyday at as 07AM you can overwrite the env __CRN__
 
 , but you can run manually to see the result. This process can take several minutes depends the database sizes
 
@@ -62,9 +62,9 @@ File's configuration
 - __db.user=root__ database user name
 - __db.password=secret__ user's password
 - _db.port=3307_ just necessary if you are using a different port
-- _db.query=SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME ='performance_schema'_ you can customize the dabase query to include or exclude some database
+- _db.query=SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME ='performance_schema'_ you can customize the database query to include or exclude some database
 
 ## Under the hook
 
-The entry point will config the cron job, running the application for the first time and up the ngixn server. The cron job call a second script who contains the main java application.
+The entry point will config the cron job, running the application for the first time and up the nginx server. The cron job call a second script who contains the main java application.
 
