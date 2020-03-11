@@ -22,6 +22,8 @@ public class DatabaseSettings {
     private final static int MSSQL_PORT = 1433;
     private final static String PGSQL_QUERY = "select datname from pg_catalog.pg_database where datname not in ('template0','template1','postgres') order by 1";
     private final static int PGSQL_PORT = 5432;
+    private final static String ORAC_QUERY = "SELECT USERNAME FROM DBA_USERS WHERE USERNAME NOT IN ('SYSTEM','SYS','ADMIN','RDSADMIN')";
+    private final static int ORAC_PORT = 1521;
 
     public static String getDriveClass(Properties prop) {
         String driveClass = "";
@@ -36,6 +38,9 @@ public class DatabaseSettings {
                 break;
             case "pgsql":
                 driveClass = prop.getProperty("jdbc.drive.class") == null ? "org.postgresql.Driver" : prop.getProperty("jdbc.drive.class");
+                break;
+            case "orathin":
+                driveClass = prop.getProperty("jdbc.drive.class") == null ? "oracle.jdbc.driver.OracleDriver" : prop.getProperty("jdbc.drive.class");
                 break;
 
         }
@@ -57,6 +62,9 @@ public class DatabaseSettings {
             case "pgsql":
                 url = prop.getProperty("db.url") == null ? String.format(JDBC_URL, "postgresql", prop.getProperty("db.server"), getServerPort(prop), "/postgres") : prop.getProperty("db.url");
                 break;
+            case "orathin":
+                url = prop.getProperty("db.url") == null ?   String.format("jdbc:oracle:thin:@%s:%s:%s", prop.getProperty("db.server"), getServerPort(prop), prop.getProperty("db.oracsid")) : prop.getProperty("db.url");
+                break;
         }
 
         return url;
@@ -75,6 +83,9 @@ public class DatabaseSettings {
                 break;
             case "pgsql":
                 query = prop.getProperty("db.query") == null ? PGSQL_QUERY : prop.getProperty("db.query");
+                break;
+            case "orathin":
+                query = prop.getProperty("db.query") == null ? ORAC_QUERY : prop.getProperty("db.query");
                 break;
 
         }
@@ -95,6 +106,9 @@ public class DatabaseSettings {
                 break;
             case "pgsql":
                 port = prop.getProperty("db.port") == null ? PGSQL_PORT : Integer.parseInt(prop.getProperty("db.port"));
+                break;
+            case "orathin":
+                port = prop.getProperty("db.port") == null ? ORAC_PORT : Integer.parseInt(prop.getProperty("db.port"));
                 break;
 
         }

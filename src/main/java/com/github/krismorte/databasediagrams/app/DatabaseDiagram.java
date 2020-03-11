@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -24,8 +25,14 @@ public class DatabaseDiagram {
     public static String DatabaseVersion;
 
     public static List<String> run(String output,Properties prop) throws Exception {
+        List<String> rows=null;
+        if(prop.getProperty("schemaspy.db.type").equals("orathin")){
+            rows = new ArrayList<>();
+            rows.add(prop.getProperty("db.oracsid"));
+        }else{
+            rows = executeQuery(prop);
+        }
 
-        List<String> rows = executeQuery(prop);
         generateShSchemaSpy(output,rows, prop);
         return rows;
     }
@@ -52,13 +59,18 @@ public class DatabaseDiagram {
     }
 
     private static String formatSchemaSpyCommand(String output,String databaseName, Properties prop) {
-        String logFile = System.getenv("LOGFILE"); 
-        
-        String schemaParam = "";        
-        String outputPath = output+ "/" + DatabaseSettings.unifyingSQLTypes(prop.getProperty("schemaspy.db.type")).trim() + "/" + prop.getProperty("db.server").trim() + "/" + databaseName;
-        
+        String logFile = System.getenv("LOGFILE");
+
+        String schemaParam = "";
+        String type = DatabaseSettings.unifyingSQLTypes(prop.getProperty("schemaspy.db.type")).trim();
+        DbType t = DbType.find(DbType.generateNewList(), type);
+        String outputPath = output+ "/" + t.type + "/" + prop.getProperty("db.server").trim() + "/" + databaseName;
+
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
+        }
+        if (prop.getProperty("schemaspy.db.type").equals("orathin")) {
+            schemaParam = " -cat % -all";
         }
 
         String dbType = handleDbType(prop.getProperty("schemaspy.db.type"));
@@ -73,6 +85,9 @@ public class DatabaseDiagram {
         }
         if (dbType.contains("mssql")){
             return "mssql";
+        }
+        if (dbType.contains("orathin")){
+            return "ojdbc";
         }
         return dbType;
     }

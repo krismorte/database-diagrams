@@ -30,7 +30,7 @@ To use this solution you have to edit the .prop files with your own servers and 
 ```
 docker run -it --rm -p 80:80 -v $PWD/dbconf:/dbconf --name databasediagrams krismorte/databasediagrams:2.0
 ```
-_*this command will show the output and lock the terminal, to run in production please remove the -it option_
+_*this command will show the output and lock the terminal, to run in production please change the -it option for -d_
 
 access the url http://localhost/
 
@@ -44,7 +44,12 @@ Depends on the amount of databases and tables this process can take a long time 
 
 , but you can run manually to see the result. This process can take several minutes depends the database sizes
 
-This solution was prepared adn tested on mysql, sql server and postgres. The Schemaspy support much more databases as can see [here](https://github.com/schemaspy/schemaspy/tree/master/src/main/resources/org/schemaspy/types) but my solution wrapper the schemaspy so I will add more database as soon as possible.
+This solution was prepared and tested on mysql, sql server, postgres and oracle. The Schemaspy support much more databases as you can see [here](https://github.com/schemaspy/schemaspy/tree/master/src/main/resources/org/schemaspy/types) but my solution wrapper the schemaspy so I will add more database as soon as possible.
+> schemaspy supported by database-diagrams are mssql, mssql05, mssql08, mysql, mariadb, postgres, postgres11, orathin
+
+### Oracle Details
+
+As Oracle remove jdbc jar from maven repository you need to download the jdbc manually on the [official site](https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html) and put the jar file on the same folder with your .prop files (ojdbc6.jar, ojdbc7.jar or ojdbc8.jar). Also you have to inform the SID on oracle prop file `db.oracsid=` and the `db.query` has no efect on Oracle.
 
 ## Build the Image
 ``` #docker build -t krismorte/databasediagrams:2.0 .```
@@ -62,9 +67,10 @@ File's configuration
 - __db.user=root__ database user name
 - __db.password=secret__ user's password
 - _db.port=3307_ just necessary if you are using a different port
-- _db.query=SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME ='performance_schema'_ you can customize the database query to include or exclude some database
+- _db.query=SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME ='performance_schema'_ you can customize the database query to include or exclude some database. Has no effect on Oracle.
+- _**db.oracsid=xe**_ required only when the type was orathin
 
 ## Under the hook
 
-The entry point will config the cron job, running the application for the first time and up the nginx server. The cron job call a second script who contains the main java application.
+The entry point will config the cron job, config the oracle on the local maven repository when it's available, running the application for the first time and up the nginx server. The cron job call a second script who contains the main java application.
 
