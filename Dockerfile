@@ -5,6 +5,7 @@ ENV CRN='0 7 * * *'
 ENV OUTPUT=/www
 ENV LOGFILE=/var/log/script.log
 ENV TMP_IDX=index.html
+ENV COMPANY_NAME='by krismorte'
 
 COPY src/ src/
 COPY pom.xml index.html /
@@ -14,7 +15,7 @@ RUN chmod 755 /scripts/*.sh
 
 
 RUN apk update && apk add --no-cache graphviz && apk add ttf-opensans && apk add maven && apk add nginx
-RUN mkdir -p /run/nginx && adduser -D -g 'www' www && chown -R www:www /var/lib/nginx && chown -R www:www /www && mvn package && wget github.com/schemaspy/schemaspy/releases/download/v6.0.0/schemaspy-6.0.0.jar -O schemaspy.jar
+RUN mkdir -p /run/nginx && adduser -D -g 'www' www && chown -R www:www /var/lib/nginx && chown -R www:www /www && wget github.com/schemaspy/schemaspy/releases/download/v6.0.0/schemaspy-6.0.0.jar -O schemaspy.jar
 
 RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
 COPY /nginx-conf/nginx.conf /etc/nginx/

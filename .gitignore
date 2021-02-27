@@ -4,6 +4,7 @@ dist/
 target/
 nbbuild/
 nbdist/
+test/
 .nb-gradle/
 .idea/
 /*.sh

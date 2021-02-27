@@ -9,7 +9,7 @@ This code was made to implementing full database documentation per server that w
 
 ## Run Docker Pull
 ```
-docker pull krismorte/databasediagrams:2.0
+docker pull krismorte/databasediagrams:2.1
 ```
 
 ## Run a test
@@ -28,9 +28,11 @@ on dbconf folder you will find .prop files with the database servers configurati
 To use this solution you have to edit the .prop files with your own servers and run this follow command:
 
 ```
-docker run -it --rm -p 80:80 -v $PWD/dbconf:/dbconf --name databasediagrams krismorte/databasediagrams:2.0
+docker run -it --rm -p 80:80 -v $PWD/dbconf:/dbconf --name databasediagrams krismorte/databasediagrams:2.1
 ```
 _*this command will show the output and lock the terminal, to run in production please change the -it option for -d_
+
+You can put your company name at the main page using the option `-e COMPANY_NAME=MyCompany`
 
 access the url http://localhost/
 
@@ -52,7 +54,7 @@ This solution was prepared and tested on mysql, sql server, postgres and oracle.
 As Oracle remove jdbc jar from maven repository you need to download the jdbc manually on the [official site](https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html) and put the jar file on the same folder with your .prop files (ojdbc6.jar, ojdbc7.jar or ojdbc8.jar). Also you have to inform the SID on oracle prop file `db.oracsid=` and the `db.query` has no efect on Oracle.
 
 ## Build the Image
-``` #docker build -t krismorte/databasediagrams:2.0 .```
+``` #docker build -t krismorte/databasediagrams:2.1 .```
 
 
 the full documentarion of the container is [here](https://hub.docker.com/r/krismorte/databasediagrams) 
