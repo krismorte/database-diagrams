@@ -9,7 +9,7 @@ This code was made to implementing full database documentation per server that w
 
 ## Run Docker Pull
 ```
-docker pull krismorte/databasediagrams:2.1
+docker pull krismorte/databasediagrams:2.2
 ```
 
 ## Run a test
@@ -28,7 +28,7 @@ on dbconf folder you will find .prop files with the database servers configurati
 To use this solution you have to edit the .prop files with your own servers and run this follow command:
 
 ```
-docker run -it --rm -p 80:80 -v $PWD/dbconf:/dbconf --name databasediagrams krismorte/databasediagrams:2.1
+docker run -it --rm -p 80:80 -v $PWD/dbconf:/dbconf --name databasediagrams krismorte/databasediagrams:2.2
 ```
 _*this command will show the output and lock the terminal, to run in production please change the -it option for -d_
 
@@ -54,7 +54,11 @@ This solution was prepared and tested on mysql, sql server, postgres and oracle.
 As Oracle remove jdbc jar from maven repository you need to download the jdbc manually on the [official site](https://www.oracle.com/database/technologies/appdev/jdbc-downloads.html) and put the jar file on the same folder with your .prop files (ojdbc6.jar, ojdbc7.jar or ojdbc8.jar). Also you have to inform the SID on oracle prop file `db.oracsid=` and the `db.query` has no efect on Oracle.
 
 ## Build the Image
-``` #docker build -t krismorte/databasediagrams:2.1 .```
+Simple build
+``` #docker build -t krismorte/databasediagrams:2.2 .```
+
+Build for multi arch 
+``` #docker buildx  --builder docker-container  build --platform linux/amd64,linux/arm64/v8  -t krismorte/databasediagrams:2.2 .```
 
 
 the full documentarion of the container is [here](https://hub.docker.com/r/krismorte/databasediagrams) 
@@ -76,3 +80,14 @@ File's configuration
 
 The entry point will config the cron job, config the oracle on the local maven repository when it's available, running the application for the first time and up the nginx server. The cron job call a second script who contains the main java application.
 
+### Docker Buildx Install on Mac
+ ```
+ brew install docker-buildx
+
+ln -sfn $(which docker-buildx) ~/.docker/cli-plugins/docker-buildx 
+
+ docker buildx create --name docker-container --driver docker-container
+
+ docker buildx build --platform linux/amd64,linux/arm64/v8  -t krismorte/databasediagrams:2.2 .
+
+ ```
