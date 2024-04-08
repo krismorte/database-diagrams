@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql:
-    image: mysql:5.6
+    image: mysql:8.3.0
     ports:
       - "3306:3306"
     environment:
@@ -9,13 +9,13 @@ services:
     volumes:
       - "$PWD/dbconf/mysql:/docker-entrypoint-initdb.d"
   mysql2:
-    image: mysql:5.6
+    image: mysql:8.3.0
     ports:
       - "3307:3306"
     environment:
       - "MYSQL_ROOT_PASSWORD=secret"
   pgsql:
-    image: postgres:11
+    image: postgres:15.6
     ports:
       - "5432:5432"
     environment:

@@ -37,10 +37,10 @@ public class DatabaseDiagram {
         return rows;
     }
 
-    private static List executeQuery(Properties prop) throws Exception {
+    private static List<String> executeQuery(Properties prop) throws Exception {
         Query query = new Query();
 
-        List<String> rows = query.run(prop);
+        List<String> rows = query.run(prop, "db.query");
 
         DatabaseVersion = query.getDatabaseProductName() + " " + query.getDatabaseProductVersion();
 
@@ -58,47 +58,64 @@ public class DatabaseDiagram {
         FileGenerator.generateSH(fileName, schemaSpyCommands);
     }
 
-    private static String formatSchemaSpyCommand(String output,String databaseName, Properties prop) {
+    private static String formatSchemaSpyCommand(String output,String databaseName, Properties prop)throws Exception {
         String logFile = System.getenv("LOGFILE");
-
-        String schemaParam = "";
+        
         String type = DatabaseSettings.unifyingSQLTypes(prop.getProperty("schemaspy.db.type")).trim();
         DbType t = DbType.find(DbType.generateNewList(), type);
         String outputPath = output+ "/" + t.type + "/" + prop.getProperty("db.server").trim() + "/" + databaseName;
+        String schemaParam = "";
+        List<String> schemas= new ArrayList<>();
+        
+
+        String dbType = prop.getProperty("schemaspy.db.type");
+        String drivesPath = searchJarDir(dbType);
 
         if (prop.getProperty("schemaspy.db.type").equals("mysql")) {
             schemaParam = " -s " + databaseName;
         }
-        if (prop.getProperty("schemaspy.db.type").equals("orathin")) {
+        else if (prop.getProperty("schemaspy.db.type").equals("orathin")) {
             schemaParam = " -cat % -all";
+        }else {
+            if (prop.getProperty("db.query.schema") != null){
+                Query query = new Query();
+                schemas = query.run(prop, "db.query");
+            }
         }
 
-        String dbType = handleDbType(prop.getProperty("schemaspy.db.type"));
-        String drivesPath = searchJarDir(dbType);
-
-        return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp "+drivesPath+"/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
+        if (schemas.size()==0){
+            return "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp "+drivesPath+"/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' "+schemaParam +" -o " + outputPath + " >> " + logFile;
+        }else{
+            String contentPerSchema = "";
+            for (String schema : schemas){
+                contentPerSchema += "/usr/bin/java -jar schemaspy.jar -t " + prop.getProperty("schemaspy.db.type") + " -dp "+drivesPath+"/ -db " + databaseName + " -host " + prop.getProperty("db.server") + " -port " + DatabaseSettings.getServerPort(prop)  + " -u " + prop.getProperty("db.user") + " -p '" + prop.getProperty("db.password") + "' -s '"+schema +"' -o " + outputPath + " >> " + logFile;
+                contentPerSchema += "\n\n";
+            }
+            return contentPerSchema;
+        }
     }
 
-    private static String handleDbType(String dbType){
-        if (dbType.contains("pgsql")){
-            return "postgresql";
-        }
-        if (dbType.contains("mssql")){
-            return "mssql";
-        }
-        if (dbType.contains("orathin")){
-            return "ojdbc";
-        }
-        return dbType;
-    }
 
-    private static String searchJarDir(final String name){
+    private static String searchJarDir(final String dbType){
         String dir="";
-        try {
+        String tempDbType="";
 
+        if (dbType.contains("pgsql")){
+            tempDbType= "postgresql";
+        }
+        else if (dbType.contains("mssql")){
+            tempDbType= "mssql";
+        }
+        else if (dbType.contains("orathin")){
+            tempDbType= "ojdbc";
+        }else{
+            tempDbType = dbType;
+        }
+        try {
+            final String nameToSearch = tempDbType;
             List<Path> files=Files.walk(Paths.get(System.getProperty("user.home")+"/.m2/repository/"))
                     .filter(Files::isRegularFile).collect(Collectors.toList());
-            Path jarFile = files.stream().filter(f -> f.toString().contains(name) && f.toString().endsWith(".jar")).findAny().orElse(null);
+            Path jarFile = files.stream().filter(f -> f.toString().contains(nameToSearch) && f.toString().endsWith(".jar")).findAny().orElse(null);
             dir = jarFile.getParent().toString();
             return dir;
         } catch (IOException e) {

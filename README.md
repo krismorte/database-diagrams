@@ -73,7 +73,8 @@ File's configuration
 - __db.user=root__ database user name
 - __db.password=secret__ user's password
 - _db.port=3307_ just necessary if you are using a different port
-- _db.query=SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME ='performance_schema'_ you can customize the database query to include or exclude some database. Has no effect on Oracle.
+- _db.query=SELECT DISTINCT SCHEMA_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME ='performance_schema'_ you can customize which database query to include or exclude some database. Has no effect on Oracle.
+- _db.query.schema=SELECT schema_name FROM information_schema.schemata_ you can customize which database schemas you want include or exclude. Has no Effect on Oracle and MySQL
 - _**db.oracsid=xe**_ required only when the type was orathin
 
 ## Under the hook

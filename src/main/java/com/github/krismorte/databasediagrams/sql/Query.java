@@ -19,14 +19,20 @@ public class Query {
     private String driverVersion;
     private String databaseProductName;
     private String databaseProductVersion;
-
-    public List run(Properties prop) throws Exception {
+/**
+ * 
+ * @param prop
+ * @param queryPropertieKey
+ * @return
+ * @throws Exception
+ */
+    public List<String> run(Properties prop,String queryPropertieKey) throws Exception {
         List<String> rows = new ArrayList<>();
         
         String user = prop.getProperty("db.user");
         String password = prop.getProperty("db.password");
-        String query =  prop.getProperty("db.query") ==null
-                ? DatabaseSettings.getDatabasesQuery(prop) : prop.getProperty("db.query") ;
+        String query =  prop.getProperty(queryPropertieKey) ==null
+                ? DatabaseSettings.getDatabasesQuery(prop) : prop.getProperty(queryPropertieKey) ;
         
         Connection connection = ConnectionFactory.getConnetion(DatabaseSettings.getDriveClass(prop)
                 , DatabaseSettings.getUrl(prop), user, password);

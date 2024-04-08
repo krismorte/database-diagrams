@@ -2,3 +2,5 @@ schemaspy.db.type=pgsql
 db.server=172.17.0.1
 db.user=postgres
 db.password=secret
+db.exclude.schemas=public
+db.query.schema=SELECT schema_name FROM information_schema.schemata
